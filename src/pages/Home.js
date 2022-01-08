@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, getDocs, doc } from "firebase/firestore";
 import { db } from "../firebase-config";
 
 const Home = () => {
@@ -14,14 +14,32 @@ const Home = () => {
     getPosts();
   }, [postsCollectionRef]);
 
+  const deletePost = async (id) => {
+    const postDoc = doc(db, "posts", id);
+    await deleteDoc(postDoc);
+  };
+
   return (
     <div className="homePage">
       {postList.map((post) => {
         return (
           <div className="post">
-            <h1>{post.title}</h1>
-            <p>{post.post}</p>
-            <p>{post.author.name}</p>
+            <div className="postHeader">
+              <div className="title">
+                <h1> {post.title}</h1>
+              </div>
+              <div className="deletePost">
+                <button
+                  onClick={() => {
+                    deletePost(post.id);
+                  }}
+                >
+                  &#128465;
+                </button>
+              </div>
+            </div>
+            <div className="postTextContainer"> {post.post} </div>
+            <h3>@{post.author.name}</h3>
           </div>
         );
       })}
