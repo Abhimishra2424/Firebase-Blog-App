@@ -1,12 +1,25 @@
 import React, { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db, auth } from "../firebase-config";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(title, post);
+  //   addDoc is a function that takes in a collection name and a document object
+
+  //   ! This is Ref collection Name of the database
+  const postsCollectionRef = collection(db, "posts");
+
+  const createPost = async () => {
+    await addDoc(postsCollectionRef, {
+      title,
+      post,
+      author: { name: auth.currentUser.displayName, id: auth.currentUser.uid },
+    });
+    navigate("/");
   };
 
   return (
@@ -34,7 +47,7 @@ const CreatePost = () => {
             onChange={(e) => setPost(e.target.value)}
           ></textarea>
         </div>
-        <button className="createPostBtn" onClick={handleSubmit}>
+        <button className="createPostBtn" onClick={createPost}>
           Create Post
         </button>
       </div>
