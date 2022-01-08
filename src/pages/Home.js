@@ -14,7 +14,19 @@ const Home = () => {
     getPosts();
   }, [postsCollectionRef]);
 
-  return <div className="homePage"></div>;
+  return (
+    <div className="homePage">
+      {postList.map((post) => {
+        return (
+          <div className="post">
+            <h1>{post.title}</h1>
+            <p>{post.post}</p>
+            <p>{post.author.name}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default Home;
