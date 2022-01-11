@@ -17,10 +17,10 @@ const Home = ({ isAuth }) => {
   const classes = useStyles();
   const [postList, setPostList] = useState([]);
   const postsCollectionRef = collection(db, "posts");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getallPosts = useCallback(async () => {
-    setLoading(true);
+    
     try {
       const data = await getDocs(postsCollectionRef);
       setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
